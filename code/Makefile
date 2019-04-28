@@ -3,7 +3,8 @@ CFLAGS = -std=c++0x -g -O0
 
 COMMON_INCLUDE = ./common
 WORLD_INCLUDE = ./world
-PROTOBUF_INCLUDE = ../3rd/protobuf-3.7.1/src/
+#PROTOBUF_INCLUDE = ../3rd/protobuf-3.7.1/src/
+PROTOBUF_INCLUDE = /usr/local/protobuf-3.7.1/include
 
 LIB = ./lib/*.a
 SERVER_SRC = $(shell find ./session ./world ./common/util ./protocol -name "*cc");
