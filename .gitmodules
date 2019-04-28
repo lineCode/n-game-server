@@ -1,3 +1,7 @@
 [submodule "code/common/net"]
 	path = code/common/net
 	url = git@github.com:nomad003/n-net.git
+[submodule "tool/protobuf"]
+	path = tool/protobuf
+	url = https://github.com/protocolbuffers/protobuf
+
