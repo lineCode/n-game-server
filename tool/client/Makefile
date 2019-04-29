@@ -1,9 +1,10 @@
-CC = g++
-
+CC = /usr/local/gcc-6.5.0/bin/g++
 CXXFLAGS = --std=c++0x -I../../code/common/net -g -O0
 
-LIBS = libnet.a
+PROTOBUF_INCLUDE = ../../3rd/protobuf-3.7.1/include
+
+LIBS = ../../code/lib/*.a
 
 .PHONY:client 
-client:
-	$(CC) $(CXXFLAGS) -o $@ client.cc $(LIBS)
+client:client.cc project.pb.cc
+	$(CC) $(CXXFLAGS) -I$(PROTOBUF_INCLUDE) -o $@ $^ $(LIBS)

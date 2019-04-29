@@ -15,8 +15,8 @@ int main(int argc, char** argv)
 	}
 	printf("connect succeed\n");
 
-	char sendbuf[1024] = { 0 };
-	char recvbuf[1024] = { 0 };
+	//char sendbuf[1024] = { 0 };
+	//char recvbuf[1024] = { 0 };
 	while (1)
 	{
 		memset(sendbuf, 1024, 0);
