@@ -1,15 +1,15 @@
-#game server
+# game server
 ## common
-###	net
-###	timer
-###	util
+	net
+	timer
+	util
 
 ## 3rd
-###	protobuf
+	protobuf
 
 ## tool
-###	protocol
-###	client
+	protocol
+	client
 
 ## src
-###	server
+	server
