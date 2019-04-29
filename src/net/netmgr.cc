@@ -1,6 +1,7 @@
 #include "netmgr.h"
 #include "stdio.h"
 #include "string.h"
+#include "assert.h"
 #include "arpa/inet.h"
 #include "session/session.h"
 #include "session/sessionmgr.h"
@@ -46,7 +47,7 @@ void Link::OnClose(int fd)
 int Link::OnRecv(int fd, const char* s, int len)
 {
 	int recv_len = 0;
-	while (len < 4)
+	while (len >= 4)
 	{
 		int size = 0;
 		memcpy(&size, s, 4);
@@ -61,9 +62,11 @@ int Link::OnRecv(int fd, const char* s, int len)
 			event->fd = fd;
 			event->type = 3;
 			
-			event->s = (char*)malloc(size + 1);
-			memset(event->s, 0, size + 1);
+			event->s = (char*)malloc(size);
+			//memset(event->s, 0, size);
 			memcpy(event->s, s + recv_len + 4, size);
+			
+			event->len = size;
 			
 			NetMgr::Instance()->GetMq().Push(event);
 
@@ -113,19 +116,21 @@ void NetMgr::Run()
 		{
 		case 1:
 		{
-			printf("socket:%d accpet\n", event->fd);
+			//printf("socket:%d accpet\n", event->fd);
+			OnAccept(event->fd);
 			break;
 		}
 		case 2:
 		{
-			printf("socket:%d close\n", event->fd);
+			//printf("socket:%d close\n", event->fd);
+			OnClose(event->fd);
 			break;
 		}
 		case 3:
 		{
-			printf("socket:%d receive:%s\n", event->fd, event->s);
+			//printf("socket:%d receive:%s\n", event->fd, event->s);
 
-			HandlePacket(event->fd, event->s, strlen(event->s));
+			HandlePacket(event->fd, event->s, event->len);
 
 			break;
 		}
@@ -158,6 +163,7 @@ bool NetMgr::HandlePacket(int fd, const char* s, int len)
 	Session* session = SessionMgr::Instance()->Get(fd);
 	if (NULL == session)
 	{
+		assert(false);
 		return false;
 	}
 
@@ -165,13 +171,16 @@ bool NetMgr::HandlePacket(int fd, const char* s, int len)
 	memcpy(&id, s, 4);
 	id = ntohl(id);
 
+	printf("fd:%d id:%d\n", fd, id);
+
 	auto i = m_id2handle.find(id);
 	if (i == m_id2handle.end())
 	{
+		assert(false);
 		return false;
 	}
 	else
 	{
-		i->second(session->GetId(), s, len);
+		i->second(session->GetId(), s + 4, len - 4);
 	}
 }

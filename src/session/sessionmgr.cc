@@ -22,6 +22,8 @@ void SessionMgr::Add(int fd)
 	Session* session = new Session();
 	session->Init(fd);
 	m_id2session[fd] = session;
+
+	printf("add session fd:%d\n", fd);
 }
 
 void SessionMgr::Del(int fd)
@@ -31,6 +33,8 @@ void SessionMgr::Del(int fd)
 	{
 		delete i->second;
 		m_id2session.erase(i);
+
+		printf("del session fd:%d\n", fd);
 	}
 }
 
@@ -52,7 +56,7 @@ bool SessionMgr::Handle_Login(int sessionid, const char* s, int len)
 	Session* session = SessionMgr::Instance()->Get(sessionid);
 	if (NULL == session)
 	{
-		return true;
+		return false;
 	}
 	LoginReq req;
 	if (!req.ParseFromArray(s, len))

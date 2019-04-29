@@ -4,6 +4,7 @@
 #include "log/log.h"
 #include "util/utiltime.h"
 #include "net/netmgr.h"
+#include "session/sessionmgr.h"
 
 bool g_game_loop = true;
 
@@ -14,6 +15,10 @@ bool Init()
 	Log("server init\n");
 
 	if (!NetMgr::Instance()->Init())
+	{
+		return false;
+	}
+	if (!SessionMgr::Instance()->Init())
 	{
 		return false;
 	}
