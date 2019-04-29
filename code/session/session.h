@@ -15,7 +15,11 @@ public:
 	Session();
 	~Session();
 
-	void Send();
+	bool Init(int fd);
+
+	int GetId() { return m_fd; }
+
+	void Send(int id, const char* s, int len);
 	void Close();
 
 private:
